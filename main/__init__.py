@@ -7,12 +7,16 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret!'
     socketio = SocketIO(app)
 
-    @app.route('/')
-    def home():
-        return render_template('home.html')
-
     @socketio.on('my event')
     def handle_message(message):
         print('received message: ' + message["data"])
+
+    @socketio.on('my event', namespace='/test')
+    def handle_my_custom_namespace_event(json):
+        print('received json: ' + str(json))
+
+    @app.route('/')
+    def home():
+        return render_template('home.html')
 
     return app
