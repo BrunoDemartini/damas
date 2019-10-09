@@ -11,4 +11,8 @@ def create_app():
     def home():
         return render_template('home.html')
 
+    @socketio.on('my event')
+    def handle_message(message):
+        print('received message: ' + message["data"])
+
     return app
