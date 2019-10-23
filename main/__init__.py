@@ -21,6 +21,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret!'
     socketio = SocketIO(app)
 
+
     @socketio.on('handle click')
     def handle_message(message):
         data = message["data"]
