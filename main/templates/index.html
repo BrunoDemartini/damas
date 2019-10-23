@@ -1,0 +1,98 @@
+<html>
+<head>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" type="text/javascript"></script>
+<script type="text/javascript" language="javascript">
+
+let socketio;
+
+const NH = 10;
+const WIDTH = 400;
+const LWIDTH = WIDTH / NH;
+const R = 15;
+let canvas;
+let context;
+
+function desenhaPeca(i, j, cor){
+    context.beginPath();
+    context.fillStyle = cor;
+    context.arc(i*LWIDTH + LWIDTH/2, j*LWIDTH + LWIDTH/2, R, 0, 2 * Math.PI);
+    context.fill();
+    context.closePath();
+}
+
+function selecionarCasa(i, j) {
+    context.beginPath();
+    context.fillStyle = "rgba(0, 255, 0, 0.5)";
+    context.fillRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
+    context.closePath();
+}
+
+function restaurarCasa(i,j){
+    context.clearRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
+    desenharCasa(i, j);
+}
+
+function desenharCasa(i, j) {
+     context.beginPath();
+     context.fillStyle =  ((i + j) % 2 == 0) ? "white" : "black";
+     context.fillRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
+     context.closePath();
+}
+
+function selecionarPeca(i,j){
+    context.beginPath();
+    context.strokeStyle = "yellow";
+    context.lineWidth = 2;
+    context.arc(i*LWIDTH + LWIDTH/2, j*LWIDTH + LWIDTH/2, R, 0, 2 * Math.PI);
+    context.stroke();
+    context.closePath();
+}
+
+function drawBoard(){
+
+    // J-linha I-coluna
+
+    for (var i = 0; i < NH; i ++) {
+        for (var j = 0; j < NH; j++) {
+            desenharCasa(i, j)
+            if ((i + j) % 2 != 0) {
+                 if  (j <= 3) desenhaPeca(i,j,"blue");
+                 else if (j >= 6) desenhaPeca(i,j,"red");
+            }
+
+        }
+    }
+    context.stroke();
+}
+
+function tratarClick(event) {
+    let i = Math.ceil(event.offsetX / LWIDTH) - 1;
+    let j = Math.ceil(event.offsetY/ LWIDTH) - 1;
+    console.log(i, j);
+    socketio.emit("handle click", {data: {i:i , j:j}});
+
+}
+
+function init() {
+    socketio = io();
+    canvas = document.getElementById("canvas");
+    context = canvas.getContext("2d");
+    drawBoard();
+    //socketio.on('mostra tabuleiro', function (_)  {
+        //drawBoard();
+    //});
+    socketio.on('seleciona peca', function (message)  {
+        let data = message.data;
+        let i = parseInt(data.i);
+        let j = parseInt(data.j);
+        selecionarPeca(i, j);
+    });
+}
+
+</script>
+</head>
+
+<body style="  background: lightblue;" onload="init();">
+    <canvas id="canvas" width="401px" height="401px" style=" background: #fff;" onclick="tratarClick(event)"></canvas>
+</body>
+</html>
