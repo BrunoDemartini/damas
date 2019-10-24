@@ -68,8 +68,7 @@ function drawBoard(){
 function tratarClick(event) {
     let i = Math.ceil(event.offsetX / LWIDTH) - 1;
     let j = Math.ceil(event.offsetY/ LWIDTH) - 1;
-    console.log(i, j);
-    socketio.emit("handle click", {data: {i:i , j:j}});
+    socketio.emit("handle click", {data: {i:j , j:i}});
 
 }
 
@@ -85,7 +84,14 @@ function init() {
         let data = message.data;
         let i = parseInt(data.i);
         let j = parseInt(data.j);
-        selecionarPeca(i, j);
+        selecionarPeca(j, i);
+    });
+
+    socketio.on('seleciona casa', function (message)  {
+        let data = message.data;
+        let i = parseInt(data.i);
+        let j = parseInt(data.j);
+        selecionarCasa(j, i); //na hora de passar inverte
     });
 }
 
