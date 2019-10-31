@@ -71,7 +71,9 @@ class Damas(object):
 
             for m in moves:
                 events.append(Event('seleciona casa', {"data": {"i": m[0], "j": m[1]}}))
-        else:
-            print('VTNC')
+        elif self.valid_moves != []:
+            print(1)
+
+            
 
         return events
