@@ -8,7 +8,6 @@ con_count = 0
 
 def create_app():
 
-
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret!'
     socketio = SocketIO(app)
@@ -20,7 +19,7 @@ def create_app():
         data = message["data"]
         i = data['i']
         j = data['j']
-        events = damas.handle_click(i, j)
+        events = damas.handle_click(i, j,)
         for e in events:
             socketio.emit(e.type, e.data)
 
