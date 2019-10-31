@@ -9,6 +9,7 @@ class Damas(object):
     valid_moves = []
     print('movimentos validos são: ', valid_moves)
 
+
     def __init__(self):
         self.__tab = [[None, 'x', None, 'x', None, 'x', None, 'x', None, 'x'],
                       ['x', None, 'x', None, 'x', None, 'x', None, 'x', None],
@@ -74,6 +75,6 @@ class Damas(object):
         elif self.valid_moves != []:
             print(1)
 
-            
+
 
         return events
