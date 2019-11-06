@@ -19,7 +19,7 @@ def create_app():
         data = message["data"]
         i = data['i']
         j = data['j']
-        events = damas.handle_click(i, j,)
+        events = damas.handle_click(i, j)
         for e in events:
             socketio.emit(e.type, e.data)
 

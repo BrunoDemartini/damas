@@ -7,6 +7,12 @@ class Damas(object):
     SIZE = 10
     SKINS = ["o", "x"]
     valid_moves = []
+    moves = None
+    c = None
+    s = None
+    vez = 0
+    jogador = None
+    cor = None
     print('movimentos validos são: ', valid_moves)
 
 
@@ -41,7 +47,7 @@ class Damas(object):
         # elif skin == Damas.SKINS[1]:
         #     dirty_moves = [(i + 1, j - 1), (i + 1, j + 1)]
         dirty_moves = self.dirty_moves(i, j, skin)
-        print('casa selecionada: ', i, j)
+        # print('casa selecionada: ', i, j)
         # print(dirty_moves)
 
         for x, y in dirty_moves:
@@ -52,28 +58,51 @@ class Damas(object):
                 if not self.__tab[x][y]:
                     self.valid_moves.append((x, y))
 
-        print('movimentos validos são: ', self.valid_moves)
+        # print('movimentos validos são: ', self.valid_moves)
 
         return self.valid_moves
 
     def handle_click(self, i, j):
-        print(self.valid_moves)
+        if self.vez % 2 == 0 :
+            self.jogador = 'o'
+            self.cor = 'red'
+        else:
+            self.jogador = 'x'
+            self.cor = 'blue'
         events = []
-        if self.valid_moves == []:
-            dirty_moves = self.dirty_moves(i, j, self.__tab[i][j])
+        moviment = []
+        dirty_moves = self.dirty_moves(i, j, self.__tab[i][j])
+        if self.valid_moves == [] and self.__tab[i][j] == self.jogador:
+            self.c = i
+            self.s = j
             for x, y in dirty_moves:
                 if 0 <= x < Damas.SIZE and 0 <= y < Damas.SIZE:
                     # print('valor com not',not self.__tab[x][y])
                     # print('valor sem not',  self.__tab[x][y])
                     if self.__tab[x][y] == None:
                         events.append(Event('seleciona peca', {"data": {"i": i, "j": j}}))
-                        moves = self.simple_moves(i, j, self.__tab[i][j])
-                        print('Movimentos: ', moves)
+                        self.moves = self.simple_moves(i, j, self.__tab[i][j])
 
-            for m in moves:
+
+            for m in self.moves:
                 events.append(Event('seleciona casa', {"data": {"i": m[0], "j": m[1]}}))
-        elif self.valid_moves != []:
-            print(1)
+
+        elif self.valid_moves != [] and self.__tab[i][j] == self.jogador or self.__tab[i][j] == None:
+            self.vez = self.vez + 1
+
+            moviment.append((i, j))
+            if moviment[0] == self.valid_moves[0] or moviment[0] == self.valid_moves[1]:
+                self.valid_moves = []
+                for m in self.moves:
+                    events.append(Event('restaura casa', {"data": {"i": m[0], "j": m[1]}}))
+                events.append(Event('restaura casa', {"data": {"i": self.c, "j": self.s}}))
+                events.append(Event('desenha peca', {"data": {"i": i, "j": j, "cor": self.cor}}))
+
+        print('Jogador ', self.jogador)
+        print('Validos ', self.valid_moves)
+        print('Movimento ', moviment)
+        print('Selecionada ', self.c, self.s)
+        print('Cor ', self.cor)
 
 
 

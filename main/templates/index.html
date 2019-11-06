@@ -93,6 +93,22 @@ function init() {
         let j = parseInt(data.j);
         selecionarCasa(j, i); //na hora de passar inverte
     });
+
+    socketio.on('restaura casa', function (message)  {
+        let data = message.data;
+        let i = parseInt(data.i);
+        let j = parseInt(data.j);
+        restaurarCasa(j, i); //na hora de passar inverte
+    });
+
+    socketio.on('desenha peca', function (message)  {
+        let data = message.data;
+        let i = parseInt(data.i);
+        let j = parseInt(data.j);
+        let color = data.cor;
+        desenhaPeca(j, i, color); //na hora de passar inverte
+        console.log(data)
+    });
 }
 
 </script>
