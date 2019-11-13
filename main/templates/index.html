@@ -19,26 +19,22 @@ function desenhaPeca(i, j, cor){
     context.fill();
     context.closePath();
 }
-
 function selecionarCasa(i, j) {
     context.beginPath();
     context.fillStyle = "rgba(0, 255, 0, 0.5)";
     context.fillRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
     context.closePath();
 }
-
 function restaurarCasa(i,j){
     context.clearRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
     desenharCasa(i, j);
 }
-
 function desenharCasa(i, j) {
      context.beginPath();
      context.fillStyle =  ((i + j) % 2 == 0) ? "white" : "black";
      context.fillRect(i * LWIDTH, j * LWIDTH, LWIDTH, LWIDTH);
      context.closePath();
 }
-
 function selecionarPeca(i,j){
     context.beginPath();
     context.strokeStyle = "yellow";
